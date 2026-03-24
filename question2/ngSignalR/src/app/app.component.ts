@@ -34,7 +34,25 @@ export class AppComponent {
 
     // TODO: Mettre isConnected à true seulement une fois que la connection au Hub est faite
     this.isConnected = true;
+
+    this.hubConnection!.on('UpdateNbUsers', (data: number) => {
+      this.nbUsers = data;
+        // data a le même type que ce qui a été envoyé par le serveur
+        console.log(data);
+    });
+
+
+    this.hubConnection
+        .start()
+        .then(() => {
+            console.log('La connexion est active!');
+          })
+        .catch(err => console.log('Error while starting connection: ' + err));
   }
+
+
+
+
 
   selectChoice(selectedChoice:number) {
     this.selectedChoice = selectedChoice;
