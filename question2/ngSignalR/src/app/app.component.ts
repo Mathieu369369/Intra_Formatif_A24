@@ -41,6 +41,20 @@ export class AppComponent {
         console.log(data);
     });
 
+    this.hubConnection!.on('UpdatePizzaPrice', (data: number) => {
+      this.pizzaPrice = data;
+    });
+
+    // Écouter l'argent seul (envoyé lors du AddMoney)
+    this.hubConnection!.on('UpdateMoney', (data: number) => {
+      this.money = data;
+    });
+
+    // Écouter le combo Pizzas + Argent (envoyé lors du Select ET du BuyPizza)
+    this.hubConnection!.on('UpdateNbPizzasAndMoney', (nb: number, m: number) => {
+      this.nbPizzas = nb;
+      this.money = m;
+    });
 
     this.hubConnection
         .start()
@@ -56,15 +70,29 @@ export class AppComponent {
 
   selectChoice(selectedChoice:number) {
     this.selectedChoice = selectedChoice;
+
+    this.hubConnection?.invoke('selectChoice', selectedChoice).catch(er => console.error(er))
+    console.log(this.hubConnection)
   }
 
   unselectChoice() {
+    if(this.selectedChoice !== -1)    this.hubConnection?.invoke("UnselectChoice", this.selectedChoice).catch(er => console.error(er))
+
     this.selectedChoice = -1;
+    this.pizzaPrice = 0;
+    this.money = 0;
+    this.nbPizzas = 0;
+
+    console.log('unselectChoice')
   }
 
   addMoney() {
+    this.hubConnection?.invoke('AddMoney', this.selectedChoice).catch(er => console.error(er))
+    console.log('Added money')
   }
 
   buyPizza() {
+    this.hubConnection?.invoke('BuyPizza', this.selectedChoice).catch(er => console.error(er))
+    console.log('pizz achete')
   }
 }
