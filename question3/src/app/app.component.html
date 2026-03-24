@@ -9,33 +9,33 @@
   <form [formGroup]="formGroup">
 
     <mat-form-field style="width: 100%">
-        <mat-label>Nom</mat-label>
-        <input matInput type="text" placeholder="Nom et prénom" formControlName="name" required>
-         @if(formGroup.get('name')?.hasError('required')) {
-    <mat-error> Votre nom est <strong>requis</strong> </mat-error>
-    }
+      <mat-label>Nom</mat-label>
+      <input matInput type="text" placeholder="Nom et prénom" formControlName="name" required>
+      @if(formGroup.get('name')?.hasError('required')) {
+      <mat-error> Votre nom est <strong>requis</strong> </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field style="width: 100%">
       <mat-label>Numéro de rue</mat-label>
       <input matInput type="number" placeholder="5230" formControlName="roadnumber" min="1000" max="9999" required>
-               @if(formGroup.get('roadnumber')?.hasError('required')) {
-    <mat-error> Votre numéro de rue est <strong>requis</strong> </mat-error>
-    }
+      @if(formGroup.get('roadnumber')?.hasError('required')) {
+      <mat-error> Votre numéro de rue est <strong>requis</strong> </mat-error>
+      }
 
       <mat-error *ngIf="formGroup.get('roadnumber')?.hasError('min')">
-    Minimum: 1000
-  </mat-error>
+        Minimum: 1000
+      </mat-error>
 
-  <mat-error *ngIf="formGroup.get('roadnumber')?.hasError('max')">
-    Maximum: 9999
-  </mat-error>
+      <mat-error *ngIf="formGroup.get('roadnumber')?.hasError('max')">
+        Maximum: 9999
+      </mat-error>
 
     </mat-form-field>
 
     <mat-form-field style="width: 100%">
-        <mat-label>Rue</mat-label>
-        <input matInput type="text" placeholder="Resther" name="rue">
+      <mat-label>Rue</mat-label>
+      <input matInput type="text" placeholder="Resther" formControlName="rue">
     </mat-form-field>
 
     <mat-form-field style="width: 100%">
@@ -51,12 +51,20 @@
 
     <mat-form-field style="width: 100%">
       <mat-label>Commentaire</mat-label>
-      <textarea matInput placeholder="Votre commentaire" name="comments"></textarea>
+      <textarea matInput placeholder="Votre commentaire" formControlName="comments"></textarea>
+
+      @if(formGroup.get('comments')?.hasError('minWords')) {
+      <mat-error> Le commentaire doit avoir au moins <strong>10 mots</strong> </mat-error>
+      }
+
+      @if(formGroup.hasError('NomDansCommentaire')) {
+      <mat-error> Le commentaire ne doit pas contenir le nom de l'utilisateur</mat-error>
+      }
 
     </mat-form-field>
 
     <mat-card-actions align="end">
-      <button  mat-raised-button color="primary" >Acheter</button>
+      <button mat-raised-button [disabled]="!formGroup.valid" color="primary">Acheter</button>
     </mat-card-actions>
   </form>
 </mat-card>
